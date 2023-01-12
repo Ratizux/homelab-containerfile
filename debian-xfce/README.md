@@ -2,7 +2,7 @@ This is the template of a Debian Xfce4 container with VNC port on 5900.
 
 The VNC configuration do NOT have access control or encryption.
 
-The default configuration requires ~160MiB of free RAM and 1~1.5GiB of storage, but more resource is recommended for a better experience.
+The default configuration requires &tilde;160MiB of free RAM and 1&tilde;1.5GiB of storage, but more resource is recommended for a better experience.
 
 # Usage
 
