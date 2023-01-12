@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.9.4
+Type=Application
+Name=Fcitx
+Comment=
+Exec=fcitx5
+RunHook=0
+StartupNotify=false
+Terminal=false
+Hidden=false

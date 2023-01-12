@@ -1,0 +1,69 @@
+FROM docker.io/library/debian:latest
+
+ENV DEFAULTUSER=username
+
+## Uncomment the line below to enable mirror repository
+# RUN sed -i 's@deb.debian.org@mirrors.ustc.edu.cn@g' /etc/apt/sources.list
+
+RUN apt update && DEBIAN_FRONTEND="noninteractive" apt -o Acquire::Retries=50 install --no-install-recommends systemd \
+##
+## Networking
+iproute2 iputils-ping \
+##
+## System management
+procps sudo \
+##
+## Basic development
+gcc g++ git vim \
+##
+## Remote management
+ssh rsync \
+##
+## Misc
+htop less man tmux \
+##
+## 3D
+## Note: If you want to use GPU for acceleration, you may have to add graphics
+## card device to the container in advance.
+# mesa-utils mesa-utils-extra \
+##
+## VNC server
+tigervnc-standalone-server \
+##
+## Locale support
+locales \
+##
+## Fcitx IME
+# fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk2 fcitx5-frontend-gtk3 fcitx5-frontend-qt5 fcitx5-module-emoji fcitx5-module-fullwidth fcitx5-module-xorg fcitx5-pinyin fcitx5-config-qt \
+##
+## Additional fonts
+# fonts-wqy-zenhei fonts-wqy-microhei \
+## Xfce4 Desktop Environment
+xfce4 xfce4-terminal \
+-y
+
+## Create user
+RUN useradd -m -G sudo -s /bin/bash ${DEFAULTUSER}
+
+## Set locale, specifying zh_CN for example
+## Don't forget to install locales package.
+##
+# RUN echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen && update-locale LANG=zh_CN.UTF-8
+
+## Enable Fcitx IME autostart
+# COPY Fcitx.desktop /home/${DEFAULTUSER}/.config/autostart/Fcitx.desktop
+# RUN chown -R ${DEFAULTUSER} /home/${DEFAULTUSER}/.config && chgrp -R ${DEFAULTUSER} /home/${DEFAULTUSER}/.config
+
+## Set corresponding environment variables
+# RUN echo "GTK_IM_MODULE=fcitx\nQT_IM_MODULE=fcitx\nXMODIFIERS=@im=fcitx" >> /etc/environment
+
+## Handy alias
+RUN echo "alias ls='ls --color=auto'\nalias grep='grep --color=auto'" >> /etc/bash.bashrc
+
+## Xfce4 session
+RUN echo "[Unit]\nDescription=Dummy Session\n[Service]\nType=simple\nExecStart=su ${DEFAULTUSER} -l -c \"Xvnc :0 SecurityTypes=None & sleep 3 && PWD=/home/${DEFAULTUSER} DISPLAY=:0 xfce4-session && pkill Xvnc\"\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/sessionwrapper.service
+
+## Session autostart
+RUN systemctl enable sessionwrapper.service
+
+ENTRYPOINT ["/bin/systemd","--system"]
