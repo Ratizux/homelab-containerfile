@@ -1,0 +1,42 @@
+FROM docker.io/library/debian:latest
+
+ENV DEFAULTUSER=username
+
+## Uncomment the line below to enable mirror repository
+# RUN sed -i 's@deb.debian.org@mirrors.ustc.edu.cn@g' /etc/apt/sources.list
+
+RUN apt update && DEBIAN_FRONTEND="noninteractive" apt -o Acquire::Retries=50 install --no-install-recommends systemd \
+##
+## Networking
+iproute2 iputils-ping \
+##
+## System management
+procps sudo \
+##
+## Basic development
+gcc g++ git vim \
+##
+## Remote management
+ssh rsync \
+##
+## Misc
+htop less man tmux \
+##
+## Locale support
+locales \
+##
+-y
+
+## Create user
+RUN useradd -m -G sudo -s /bin/bash ${DEFAULTUSER}
+
+## Set locale, specifying zh_CN for example
+## Don't forget to install locales package.
+##
+# RUN echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen && update-locale LANG=zh_CN.UTF-8
+
+## Handy alias
+RUN echo "alias ls='ls --color=auto'\nalias grep='grep --color=auto'" >> /etc/bash.bashrc
+
+
+ENTRYPOINT ["/bin/systemd","--system"]
