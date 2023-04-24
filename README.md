@@ -8,11 +8,62 @@ Prior knowledge of Linux and Docker/Podman is required to use this configuration
 
 #### Podman
 
-Build an image with Containerfile:
+With a Containerfile in current directory, build an image with Containerfile:
 
 ```
-$ ls
-Containerfile  README.md
-$ podman build -t new_image .
-...
+podman build -t new_image .
+```
+
+And create a container:
+
+```
+podman create --name new_container new_image
+```
+
+    Or if you want to bind port `8022` on the host to `22` in the container:
+    
+    ```
+    podman create --name new_container -p 8022:22 new_image
+    ```
+
+    With `ptrace()`:
+    
+    ```
+    podman create --name new_container --cap-add sys_ptrace new_image
+    ```
+    
+    With `/dev/kvm` passed through:
+
+    ```
+    podman create --name new_container --device /dev/kvm --group-add keep-groups new_image
+    ```
+
+Start the container:
+
+```
+podman start new_container
+```
+
+You may want to execute a program in a running container:
+
+```
+podman exec -it new_container bash
+```
+
+    Or without a tty:
+    
+    ```
+    podman exec new_container ls
+    ```
+
+Stop the container:
+
+```
+podman stop new_container
+```
+
+Delete image:
+
+```
+podman rm new_image
 ```
