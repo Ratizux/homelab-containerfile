@@ -1,4 +1,4 @@
-FROM docker.io/library/debian:latest
+FROM docker.io/library/debian:bullseye
 
 ENV DEFAULTUSER=username
 
@@ -36,10 +36,10 @@ locales \
 # fonts-wqy-zenhei fonts-wqy-microhei \
 ## Xfce4 Desktop Environment
 xfce4 xfce4-terminal \
--y
+-y && \
 
 ## Create user
-RUN useradd -m -G sudo -s /bin/bash ${DEFAULTUSER} && \
+useradd -m -G sudo -s /bin/bash ${DEFAULTUSER} && \
 
 ## Set locale, specifying zh_CN for example
 ## Don't forget to install locales package.
@@ -53,6 +53,6 @@ RUN useradd -m -G sudo -s /bin/bash ${DEFAULTUSER} && \
 # echo "GTK_IM_MODULE=fcitx\nQT_IM_MODULE=fcitx\nXMODIFIERS=@im=fcitx" >> /etc/environment && echo "alias ls='ls --color=auto'\nalias grep='grep --color=auto'" >> /etc/bash.bashrc && \
 
 ## Xfce4 session
-echo "[Unit]\nDescription=Dummy Session\n[Service]\nType=simple\nExecStart=su ${DEFAULTUSER} -l -c \"Xvnc :0 SecurityTypes=None & sleep 3 && PWD=/home/${DEFAULTUSER} DISPLAY=:0 startxfce4 && pkill Xvnc\"\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/sessionwrapper.service && systemctl enable sessionwrapper.service
+echo "[Unit]\nDescription=Dummy Xfce4 Session\n[Service]\nType=simple\nExecStart=su ${DEFAULTUSER} -l -c \"Xvnc :0 SecurityTypes=None & sleep 3 && PWD=/home/${DEFAULTUSER} DISPLAY=:0 startxfce4 && pkill Xvnc\"\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/sessionwrapper.service && systemctl enable sessionwrapper.service
 
 ENTRYPOINT ["/bin/systemd","--system"]
