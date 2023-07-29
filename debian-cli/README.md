@@ -1,5 +1,5 @@
-A VM-like plain container with systemd enabled.
+A VM-like plain container with systemd as init.
 
 # Specifications
 
-- Debian 11 (Bullseye)
+- Debian 12 bookworm
