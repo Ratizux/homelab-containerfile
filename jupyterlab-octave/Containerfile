@@ -1,0 +1,9 @@
+FROM docker.io/jupyter/base-notebook
+
+USER root
+
+RUN \
+
+apt update && DEBIAN_FRONTEND="noninteractive" apt install octave-general -y && su ${NB_USER} -c "/opt/conda/bin/mamba install --yes octave_kernel"
+
+USER ${NB_USER}

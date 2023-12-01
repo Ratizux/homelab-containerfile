@@ -2,9 +2,11 @@
 
 Various Containerfile for complex HomeLab configuration.
 
-Prior knowledge of Linux and Docker/Podman is required to use this configuration. It is recommended to read documentations of [Docker](https://docs.docker.com/) or [Podman](https://docs.podman.io/en/latest/Tutorials.html) if you are not familiar with container.
+Prior knowledge of Linux and Podman is required to use this configuration. It is recommended to read documentations of [Podman](https://docs.podman.io/en/latest/Tutorials.html) if you are not familiar with container.
 
-## Quick Start (Podman)
+Some configuration may not compatible with Docker.
+
+## Quick Start
 
 #### Build
 
@@ -62,8 +64,26 @@ podman stop new_container
 
 #### Cleanup
 
+Delete container:
+
+```
+podman rm new_container
+```
+
 Delete image:
 
 ```
-podman rm new_image
+podman rmi new_image
+```
+
+## Pod control
+
+A pod can be seen as a group of containers sharing some resources, for example, network namespace.
+
+#### Create pod
+
+Create a new pod with ports exposed. All containers in the pod will share the network namespace (so any container listening port `80` will be exposed), please be careful of port conflicts.
+
+```
+podman pod create -p 7707:80 new_pod
 ```
