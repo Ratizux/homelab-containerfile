@@ -12,6 +12,6 @@ podman create --name postgresql -e POSTGRES_PASSWORD=[Password] --pod postgres p
 podman create --name pgadmin -e PGADMIN_DEFAULT_EMAIL=[Email] -e PGADMIN_DEFAULT_PASSWORD=[Password] --pod postgres pgadmin4
 ```
 
-We abuse privileged account `postgres` here because this configuration is indented for learning basic feature of PostgreSQL.
+Privileged account `postgres` is used here because this configuration is indented for learning basic feature of PostgreSQL.
 
 Do NOT use this configuration for serious business.
