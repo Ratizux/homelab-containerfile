@@ -1,0 +1,15 @@
+FROM leap:15.5
+
+RUN sed -i 's@download.opensuse.org@mirrors.ustc.edu.cn/opensuse@g' /etc/zypp/repos.d/*.repo && \
+zypper --non-interactive --gpg-auto-import-keys addrepo -cf -p 50 https://download.opensuse.org/repositories/X11:/RemoteDesktop/15.5/X11:RemoteDesktop.repo && \
+zypper --non-interactive --gpg-auto-import-keys refresh && \
+zypper --non-interactive install -t pattern xfce && \
+zypper --non-interactive install xrdp xorgxrdp xorg-x11-server \
+pipewire-pulseaudio pipewire-alsa pipewire-module-xrdp \
+xfce4-terminal xfce4-pulseaudio-plugin \
+sudo pavumeter tar gzip \
+wqy-zenhei-fonts noto-sans-cjk-fonts && \
+systemctl enable xrdp && \
+echo -e "export XDG_SESSION_TYPE=x11\n/usr/bin/dbus-run-session /usr/bin/xfce4-session" > /etc/xrdp/startwm.sh
+
+ENTRYPOINT ["/usr/lib/systemd/systemd","--system"]
