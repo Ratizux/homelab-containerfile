@@ -1,0 +1,14 @@
+set $mod Mod4
+set $term foot
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+e exec swaymsg exit
+
+# Disable swaybar
+
+# Set borderless window
+default_border none
+
+exec wayvnc 0.0.0.0 5900
+exec chromium-browser --no-first-run --no-default-browser-check https://bing.com
+include /etc/sway/config.d/*
