@@ -1,0 +1,7 @@
+FROM ghcr.io/eweos/docker:master
+
+ENV DEFAULTUSER=username
+
+RUN \
+pacman -Syu --noconfirm && \
+pacman -S base-devel ewe-pkgtool strace git pacman-contrib --noconfirm
