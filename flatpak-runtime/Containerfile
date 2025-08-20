@@ -1,0 +1,23 @@
+FROM alpine:3.22
+
+ARG DEFAULTUSER=username
+COPY config/ /tmp/config/
+
+RUN \
+sed -i 's@dl-cdn.alpinelinux.org@mirrors.tuna.tsinghua.edu.cn@g' /etc/apk/repositories && \
+apk update && \
+apk add sway swaybg wayvnc xwayland dbus dbus-x11 libcap-utils font-wqy-zenhei flatpak foot xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk pipewire pipewire-pulse \
+fcitx5 fcitx5-chinese-addons fcitx5-configtool \
+&& \
+setcap -r /usr/bin/sway && \
+adduser -D ${DEFAULTUSER} && \
+mkdir -p /run/user/1000 && \
+chown ${DEFAULTUSER} /run/user/1000
+
+USER ${DEFAULTUSER}
+ENV XDG_RUNTIME_DIR=/run/user/1000
+ENV WLR_BACKENDS=headless
+
+RUN mkdir -p /home/${DEFAULTUSER}/.config/sway && cp /tmp/config/sway /home/${DEFAULTUSER}/.config/sway/config
+
+ENTRYPOINT ["/usr/bin/dbus-launch","/usr/bin/sway"]

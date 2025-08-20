@@ -1,0 +1,24 @@
+set $mod Mod4
+set $term foot
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+e exec swaymsg exit
+
+# Disable swaybar
+
+# Set borderless window
+default_border none
+
+exec wayvnc 0.0.0.0 5900
+
+# Launch dummy audio service in order for applications not to crash
+exec /usr/libexec/pipewire-launcher
+
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+
+# Execute any graphical software automatically here, like:
+# exec flatpak run com.valvesoftware.Steam
+
+exec fcitx5
+
+include /etc/sway/config.d/*
